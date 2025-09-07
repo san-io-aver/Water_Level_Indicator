@@ -6,13 +6,12 @@ from streamlit_autorefresh import st_autorefresh
 AIO_USERNAME = st.secrets["AIO_USERNAME"]
 AIO_KEY = st.secrets["AIO_KEY"]
 
-# Auto-refresh every 15 seconds
-st_autorefresh(interval=20000, key="my_autorefresh_key")
+st_autorefresh(interval=15000, key="my_autorefresh_key")
 
 st.title("Water Tank Level Dashboard")
-
+st.markdown("---") 
 feeds = [
-    {"name": "Water Tank 1", "feed": "tank1-level"}
+    {"name": "Tank 1", "feed": "tank1-level"}
 ]
 
 cols_per_row = 3
@@ -38,8 +37,11 @@ for i in range(0, len(feeds), cols_per_row):
             fig = go.Figure(go.Indicator(
             mode="gauge+number",
             value=value,
-            number={'suffix': '%', 'font': {'size': 36}},
-            title={'text': feed["name"], 'font': {'size': 20}},
+            number={'suffix': '%', 'font': {'size': 56}},
+            title={
+                'text': feed["name"],       # feed name as title
+                'font': {'size': 20}        # adjust title font size
+            },
             gauge={
                 'axis': {'range': [0, 100]},
                 'bar': {'color': bar_color, 'thickness': 0.6},  # chunky inner bar
@@ -59,6 +61,8 @@ for i in range(0, len(feeds), cols_per_row):
                 paper_bgcolor="rgba(0,0,0,0)"
             )
             
-            cols[j].plotly_chart(fig, use_container_width=True)
+            with cols[j]:
+                st.markdown(f"### {feed['name']}")  # title above gauge
+                st.plotly_chart(fig, use_container_width=True)
         else:
             cols[j].warning(f"Could not fetch data for {feed['name']}")
