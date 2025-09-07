@@ -7,7 +7,7 @@ AIO_USERNAME = st.secrets["AIO_USERNAME"]
 AIO_KEY = st.secrets["AIO_KEY"]
 
 # Auto-refresh every 15 seconds
-st_autorefresh(interval=15000, key="my_autorefresh_key")
+st_autorefresh(interval=20000, key="my_autorefresh_key")
 
 st.title("Water Tank Level Dashboard")
 
@@ -38,6 +38,7 @@ for i in range(0, len(feeds), cols_per_row):
             fig = go.Figure(go.Indicator(
             mode="gauge+number",
             value=value,
+            number={'suffix': '%', 'font': {'size': 36}},
             title={'text': feed["name"], 'font': {'size': 20}},
             gauge={
                 'axis': {'range': [0, 100]},
